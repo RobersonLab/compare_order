@@ -10,7 +10,7 @@
 
 // constant info
 const std::string PROGNAME = "compare_order";
-const std::string VERSION = "1.0.1";
+const std::string VERSION = "1.0.2";
 const std::string USAGE = PROGNAME + std::string(" v") + VERSION + std::string("\nUsage:\ncompare_order --file1 in1.fq --file2 in2.fq --format fastq\ncompare_order --file1 in1.txt --file2 in2.txt --format scarf\n");
 
 // globals
@@ -170,7 +170,11 @@ int main( int argc, char *argv[])
 			size_t search_pos = buffer1.find_last_of( std::string("#") );
 			if (search_pos == std::string::npos)
 			{
-				error( "No \'#\' character in read 1 at line " + convertToString(lineCount) );
+				search_pos = buffer1.find_last_of( std::string(" ") );
+				if (search_pos == std::string::npos)
+				{
+					error( "No \'#\' or \' \' character in read 1 at line " + convertToString(lineCount) );
+				}
 			}
 
 			buffer1.erase(search_pos);
@@ -178,7 +182,11 @@ int main( int argc, char *argv[])
 			search_pos = buffer2.find_last_of( std::string("#") );
 			if (search_pos == std::string::npos)
 			{
-				error( "No \'#\' character in read 2 at line " + convertToString(lineCount) );
+				search_pos = buffer2.find_last_of( std::string(" ") );
+				if (search_pos == std::string::npos)
+				{
+					error( "No \'#\' or \' \' character in read 2 at line " + convertToString(lineCount) );
+				}
 			}
 
 			buffer2.erase(search_pos);
@@ -232,7 +240,11 @@ int main( int argc, char *argv[])
 				size_t search_pos = buffer1.find_last_of( std::string("#") );
 				if (search_pos == std::string::npos)
 				{
-					error( "No \'#\' character in read 1 at line " + convertToString(lineCount) );
+					search_pos = buffer1.find_last_of( std::string(" ") );
+					if (search_pos == std::string::npos)
+					{
+						error( "No \'#\' or \' \' character in read 1 at line " + convertToString(lineCount) );
+					}
 				}
 
 				buffer1.erase(search_pos);
@@ -240,7 +252,11 @@ int main( int argc, char *argv[])
 				search_pos = buffer2.find_last_of( std::string("#") );
 				if (search_pos == std::string::npos)
 				{
-					error( "No \'#\' character in read 2 at line " + convertToString(lineCount) );
+					search_pos = buffer2.find_last_of( std::string(" ") );
+					if (search_pos == std::string::npos)
+					{
+						error( "No \'#\' or \' \' character in read 2 at line " + convertToString(lineCount) );
+					}
 				}
 
 				buffer2.erase(search_pos);
