@@ -10,7 +10,7 @@
 
 // constant info
 const std::string PROGNAME = "compare_order";
-const std::string VERSION = "1.0.2";
+const std::string VERSION = "1.0.3";
 const std::string USAGE = PROGNAME + std::string(" v") + VERSION + std::string("\nUsage:\ncompare_order --file1 in1.fq --file2 in2.fq --format fastq\ncompare_order --file1 in1.txt --file2 in2.txt --format scarf\n");
 
 // globals
@@ -20,7 +20,7 @@ std::string format;
 
 void error( std::string const& err )
 {
-	std::cerr << err << std::endl;
+	std::cerr << std::string("Error: ") << err << std::endl;
 	std::exit(1);
 }
 
