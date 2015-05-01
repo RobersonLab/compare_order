@@ -2,7 +2,7 @@ compare_order
 =============
 
 ## Purpose
-A simple C++ program for comparing the read identifiers of two sequencing files (Illumina formatted single-line or FASTQ format). It reads the files line by line together and compares their read identifiers. The goal is to confirm that reads are ordered the same in each file. The identifier must be separated from index/pair by a # or a single space character, e.g. HWIFAKE:1:1:1:1#0/1 or HWIFAKE:1:1:1:1 0/1.
+A simple C++ program for comparing the read identifiers of two sequencing files (Illumina formatted single-line or FASTQ format). It reads the files line by line together and compares their read identifiers. The goal is to confirm that reads are ordered the same in each file. The identifier must be separated from index/pair by a '#', a single space character, or a trailing '/', e.g. HWIFAKE:1:1:1:1#0/1 or HWIFAKE:1:1:1:1 0/1 or HWIFAKE:1:1:1:1/1.
 
 ## Compiling
 
@@ -19,5 +19,7 @@ Requires specifying three parameters:
 --file1 filename
 --file2 filename
 
-    compare_order --format scarf --file1 mate_1.txt --file2 mate_2.txt
-	compare_order --format fastq --file1 mate_1.fq --file2 mate_2.fq
+```bash
+compare_order --format scarf --file1 mate_1.txt --file2 mate_2.txt
+compare_order --format fastq --file1 mate_1.fq --file2 mate_2.fq
+```
