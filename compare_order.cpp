@@ -10,7 +10,7 @@
 
 // constant info
 const std::string PROGNAME = "compare_order";
-const std::string VERSION = "1.0.3";
+const std::string VERSION = "1.0.4";
 const std::string USAGE = PROGNAME + std::string(" v") + VERSION + std::string("\nUsage:\ncompare_order --file1 in1.fq --file2 in2.fq --format fastq\ncompare_order --file1 in1.txt --file2 in2.txt --format scarf\n");
 
 // globals
@@ -109,6 +109,28 @@ void parseOptions( int argCount, char *commands[] )
 	std::cout << std::string("--format: ") << format << std::endl;
 }
 
+void cleanHeader( std::string &s, unsigned long long int count )
+{
+	size_t search_pos = s.find_last_of( std::string( "#" ) );
+	
+	if ( search_pos == std::string::npos )
+	{
+		search_pos = s.find_last_of( std::string( " " ) );
+		
+		if ( search_pos == std::string::npos )
+		{
+			search_pos = s.find_last_of( std::string( "/" ) );
+			
+			if ( search_pos == std::string::npos )
+			{
+				error( "No \'#\' or \' \' character in read 1 at line " + convertToString( count ) );
+			}
+		}
+	}
+
+	s.erase( search_pos );
+}
+
 int main( int argc, char *argv[])
 {
 	clock_t tStart = std::clock();
@@ -167,30 +189,9 @@ int main( int argc, char *argv[])
 				error( "File 2 did not read input at line " + convertToString( lineCount ) );
 			}
 
-			size_t search_pos = buffer1.find_last_of( std::string("#") );
-			if (search_pos == std::string::npos)
-			{
-				search_pos = buffer1.find_last_of( std::string(" ") );
-				if (search_pos == std::string::npos)
-				{
-					error( "No \'#\' or \' \' character in read 1 at line " + convertToString(lineCount) );
-				}
-			}
-
-			buffer1.erase(search_pos);
-
-			search_pos = buffer2.find_last_of( std::string("#") );
-			if (search_pos == std::string::npos)
-			{
-				search_pos = buffer2.find_last_of( std::string(" ") );
-				if (search_pos == std::string::npos)
-				{
-					error( "No \'#\' or \' \' character in read 2 at line " + convertToString(lineCount) );
-				}
-			}
-
-			buffer2.erase(search_pos);
-
+			cleanHeader( buffer1, lineCount );
+			cleanHeader( buffer2, lineCount );
+			
 			if (buffer1 != buffer2)
 			{
 				error( "Read 1 ID != Read 2 ID at line " + convertToString( lineCount ) + "\nFile 1: " + buffer1 + "\nFile 2: " + buffer2 + "\n" );
@@ -237,29 +238,8 @@ int main( int argc, char *argv[])
 
 			if (fqLine == 1)
 			{
-				size_t search_pos = buffer1.find_last_of( std::string("#") );
-				if (search_pos == std::string::npos)
-				{
-					search_pos = buffer1.find_last_of( std::string(" ") );
-					if (search_pos == std::string::npos)
-					{
-						error( "No \'#\' or \' \' character in read 1 at line " + convertToString(lineCount) );
-					}
-				}
-
-				buffer1.erase(search_pos);
-
-				search_pos = buffer2.find_last_of( std::string("#") );
-				if (search_pos == std::string::npos)
-				{
-					search_pos = buffer2.find_last_of( std::string(" ") );
-					if (search_pos == std::string::npos)
-					{
-						error( "No \'#\' or \' \' character in read 2 at line " + convertToString(lineCount) );
-					}
-				}
-
-				buffer2.erase(search_pos);
+				cleanHeader( buffer1, lineCount );
+				cleanHeader( buffer2, lineCount );
 
 				if (buffer1 != buffer2)
 				{
