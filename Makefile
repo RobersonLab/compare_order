@@ -9,23 +9,16 @@ CXXFLAGS =
 
 CXXFLAGS += -O3 -I. -Wall
 OUTPUT = compare_order
-
-SRC = compare_order.cpp
-
-HDR = 
-
-OBJ = $(SRC:.cpp=.o)
+SRC = $(addsuffix .cpp, $(OUTPUT))
+OBJ = $(addsuffix .o, $(OUTPUT))
 
 all : $(OUTPUT) 
 
 $(OUTPUT) : $(OBJ)
 	$(CXX) $(CXXFLAGS) -o $(OUTPUT) $(OBJ)
 
-$(OBJ) : $(HDR)
-
-.cpp.o : 
+%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $*.cpp
-.SUFFIXES : .cpp .c .o $(SUFFIXES)
 
 .PHONEY : clean install uninstall
 
