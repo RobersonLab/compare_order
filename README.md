@@ -23,3 +23,15 @@ Requires specifying three parameters:
 compare_order --format scarf --file1 mate_1.txt --file2 mate_2.txt
 compare_order --format fastq --file1 mate_1.fq --file2 mate_2.fq
 ```
+
+### What about compressed FASTQ files?
+Most FASTQ files in long-term storage will be compressed, but this simple program doesn't automagically handle FASTQ files. How can we get around that? Simple on Linux-like systems that support mkfifo. Assume your files are called read1.fastq.gz and read2.fastq.gz. Using mkfifo with gunzip -cd will use an intermediate file-in-file-out to stream the decompressed file to the program, but leave the compressed file intact. The '-cd' option for gunzip, however, is **critical** because otherwise the original file will be consumed in the process and disappear.
+
+```bash
+mkfifo r1.fastq r2.fastq
+nohup gunzip -cd read1.fastq.gz > r1.fastq &
+nohup gunzip -cd read2.fastq.gz > r2.fastq &
+compare_order --format fastq --file1 r1.fastq --file2 r2.fastq > order.log
+rm r1.fastq r2.fastq
+```
+
